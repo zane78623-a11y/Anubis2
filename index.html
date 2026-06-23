@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anubis Romania - Autentificare</title>
+    <link rel="icon" type="image/png" href="Imagines/Anubislogo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="login-container">
+    <div class="login-box">
+        <div class="login-logo">
+            <img src="Imagines/Anubislogo.png" alt="Anubis Romania">
+            <h1>Anubis<span>Romania</span></h1>
+            <p>Autentificare în sistem</p>
+        </div>
+
+        <div class="login-error" id="loginError"></div>
+
+        <!-- ===== FORMULAR LOGIN / ÎNREGISTRARE ===== -->
+        <form class="login-form" id="loginForm">
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Numele tău</label>
+                <input type="text" id="username" placeholder="Introdu numele tău" required>
+                <small style="color:var(--text-muted);font-size:0.75rem;display:block;margin-top:4px;">
+                    <i class="fas fa-info-circle"></i> Dacă ești nou, îți vom genera un ID automat
+                </small>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Parolă</label>
+                <input type="password" id="password" placeholder="Introdu parola" required>
+            </div>
+            
+            <div style="display:flex;gap:10px;margin-bottom:16px;">
+                <button type="submit" class="btn-login" id="loginBtn" style="flex:1;">
+                    <i class="fas fa-sign-in-alt"></i> Autentificare
+                </button>
+                <button type="button" class="btn-login" id="registerBtn" style="flex:1;background:linear-gradient(135deg, var(--gold), var(--gold-dark));">
+                    <i class="fas fa-user-plus"></i> Înregistrare
+                </button>
+            </div>
+            
+            <input type="hidden" id="actionType" value="login">
+        </form>
+
+        <div class="login-footer">
+            <i class="fas fa-shield-alt"></i> Sistem securizat Anubis Romania
+            <br>
+            <span style="font-size:0.7rem;color:var(--text-muted);">
+                Cont default: Administrator / admin2024
+                <br>
+                <span style="color:var(--text-muted);">💡 Noul utilizator primește automat ID unic</span>
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="toast" id="toast">
+    <div class="toast-content">
+        <i class="fas fa-check-circle toast-icon" id="toastIcon"></i>
+        <div>
+            <div class="toast-title" id="toastTitle">Succes!</div>
+            <div class="toast-message" id="toastMessage">Acțiune realizată cu succes.</div>
+        </div>
+    </div>
+</div>
+
+<script src="js/auth.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('loginForm');
+        const errorEl = document.getElementById('loginError');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const actionType = document.getElementById('actionType');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        
+        // Check if already logged in
+        if (window.auth && window.auth.isLoggedIn()) {
+            window.location.href = 'panel.html';
+            return;
+        }
+        
+        // ===== LOGIN =====
+        loginBtn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            actionType.value = 'login';
+            await handleSubmit();
+        });
+        
+        // ===== REGISTER =====
+        registerBtn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            actionType.value = 'register';
+            await handleSubmit();
+        });
+        
+        // ===== SUBMIT =====
+        async function handleSubmit() {
+            const name = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            const action = actionType.value;
+            
+            if (!name || !password) {
+                showError('Completează toate câmpurile!');
+                return;
+            }
+            
+            if (password.length < 4) {
+                showError('Parola trebuie să aibă cel puțin 4 caractere!');
+                return;
+            }
+            
+            let result;
+            
+            if (action === 'login') {
+                result = await window.auth.login(name, password);
+            } else {
+                result = await window.auth.register(name, password);
+            }
+            
+            if (result.success) {
+                if (action === 'register') {
+                    showToast('✅ Cont Creat!', result.message);
+                    // Switch to login mode
+                    actionType.value = 'login';
+                    loginBtn.style.background = 'linear-gradient(135deg, var(--green-dark), var(--green))';
+                    registerBtn.style.background = 'linear-gradient(135deg, var(--gold), var(--gold-dark))';
+                    // Auto login after registration
+                    setTimeout(async () => {
+                        const loginResult = await window.auth.login(name, password);
+                        if (loginResult.success) {
+                            window.location.href = 'panel.html';
+                        }
+                    }, 1500);
+                } else {
+                    window.location.href = 'panel.html';
+                }
+            } else {
+                showError(result.message);
+            }
+        }
+        
+        // ===== SHOW ERROR =====
+        function showError(message) {
+            errorEl.textContent = '❌ ' + message;
+            errorEl.classList.add('show');
+            setTimeout(() => {
+                errorEl.classList.remove('show');
+            }, 5000);
+        }
+        
+        // ===== TOAST =====
+        function showToast(title, message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            const titleEl = document.getElementById('toastTitle');
+            const messageEl = document.getElementById('toastMessage');
+            
+            toast.className = 'toast';
+            if (type === 'error') toast.classList.add('error');
+            
+            icon.className = `fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'} toast-icon`;
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+            
+            toast.classList.add('show');
+            
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+        
+        // ===== ENTER KEY =====
+        form.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                loginBtn.click();
+            }
+        });
+    });
+</script>
+</body>
+</html>

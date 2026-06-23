@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" sizes="1080x1080" href="Imagines/Anubislogo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regulament - Anubis Romania</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: #00c853;
+            --secondary-color: #ffd700;
+            --accent-color: #00e676;
+            --highlight-color: #ffd700;
+            --dark-bg: #0a0f0a;
+            --card-bg: rgba(10, 15, 10, 0.85);
+            --text-color: #e8f5e9;
+            --primary-glow: 0 0 15px rgba(0, 200, 83, 0.6), 0 0 30px rgba(255, 215, 0, 0.3);
+            --secondary-glow: 0 0 15px rgba(255, 215, 0, 0.6), 0 0 30px rgba(0, 200, 83, 0.3);
+            --primary-gradient: linear-gradient(135deg, #00c853, #00e676);
+            --secondary-gradient: linear-gradient(135deg, #ffd700, #ffb300);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0a0f0a;
+            color: #d4d4d4;
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            background-image: linear-gradient(to bottom, #0f1a0f, #0a0f0a);
+            min-height: 100vh;
+            line-height: 1.8;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.4s ease;
+            background: rgba(10, 15, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 200, 83, 0.12);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo img {
+            height: 45px;
+            width: auto;
+        }
+
+        .logo h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #e8f5e9;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(0, 200, 83, 0.3);
+        }
+
+        .logo span {
+            color: var(--secondary-color);
+        }
+
+        .nav-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #e8f5e9;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: #b0b0b0;
+            font-weight: 500;
+            font-size: 1rem;
+            position: relative;
+            padding: 5px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: var(--secondary-gradient);
+            transition: width 0.3s ease;
+            box-shadow: var(--secondary-glow);
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary-color);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--secondary-color);
+        }
+
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* ===== RULES HERO ===== */
+        .rules-hero {
+            padding: 30px 0 20px;
+            margin: 100px 0 30px;
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.1);
+        }
+
+        .rules-hero h1 {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 3px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.15);
+        }
+
+        .rules-hero .subtitle {
+            color: #b0b0b0;
+            font-size: 1.2rem;
+            margin-top: 12px;
+            max-width: 750px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .rules-hero .last-updated {
+            color: #888;
+            font-size: 0.95rem;
+            margin-top: 10px;
+        }
+
+        .rules-hero .rule-count {
+            display: inline-block;
+            background: var(--primary-gradient);
+            color: #0a0f0a;
+            font-weight: 700;
+            padding: 4px 22px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 12px;
+        }
+
+        /* ===== RULE CATEGORIES ===== */
+        .rule-category {
+            color: var(--secondary-color);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 45px 0 20px;
+            letter-spacing: 1px;
+            font-family: 'Orbitron', sans-serif;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.08);
+            padding-bottom: 8px;
+        }
+
+        .rule-category i {
+            margin-right: 15px;
+            color: var(--primary-color);
+        }
+
+        /* ===== RULES CONTENT ===== */
+        .rule-section {
+            margin-bottom: 35px;
+        }
+
+        .rule-title {
+            color: var(--secondary-color);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .rule-title .rule-number {
+            display: inline-block;
+            background: var(--primary-gradient);
+            color: #0a0f0a;
+            font-weight: 700;
+            padding: 0 14px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .rule-title i {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .rule-text {
+            color: #c8c8c8;
+            font-size: 1.05rem;
+            padding-left: 10px;
+            margin-bottom: 4px;
+        }
+
+        .rule-text strong {
+            color: var(--secondary-color);
+        }
+
+        .rule-details {
+            color: #a8a8a8;
+            font-size: 1rem;
+            padding-left: 30px;
+            margin: 6px 0 10px;
+        }
+
+        .rule-details ul {
+            list-style: none;
+            padding: 0;
+            margin: 6px 0;
+        }
+
+        .rule-details ul li {
+            padding-left: 22px;
+            position: relative;
+            margin-bottom: 2px;
+        }
+
+        .rule-details ul li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+        }
+
+        .rule-details .note {
+            color: #888;
+            font-style: italic;
+            margin-top: 6px;
+        }
+
+        .rule-divider {
+            border: none;
+            border-top: 1px solid rgba(255, 215, 0, 0.06);
+            margin: 6px 0 12px;
+        }
+
+        /* ===== BACK BUTTON ===== */
+        .back-btn {
+            display: inline-block;
+            padding: 10px 28px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            background: var(--primary-gradient);
+            color: #0a0f0a;
+            text-decoration: none;
+            box-shadow: 0 0 20px rgba(0, 200, 83, 0.2);
+            font-family: 'Rajdhani', sans-serif;
+            margin-bottom: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(135deg, #00e676, #00c853);
+            box-shadow: 0 0 30px rgba(0, 200, 83, 0.4);
+            transform: translateY(-2px);
+            color: #0a0f0a;
+        }
+
+        .back-btn i {
+            margin-right: 10px;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background-color: #111a11;
+            padding: 45px 0 0;
+            margin-top: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--secondary-color), var(--primary-color), transparent);
+            opacity: 0.4;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-logo {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-logo img {
+            height: 50px;
+            width: auto;
+            margin-bottom: 10px;
+        }
+
+        .footer-logo h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(0, 200, 83, 0.2);
+        }
+
+        .footer-logo span {
+            color: var(--secondary-color);
+        }
+
+        .footer-logo p {
+            opacity: 0.6;
+            font-size: 0.95rem;
+        }
+
+        .footer-links {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .footer-links h4 {
+            font-size: 1.1rem;
+            margin-bottom: 18px;
+            color: #e8f5e9;
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-links h4::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -4px;
+            width: 40px;
+            height: 2px;
+            background: var(--secondary-gradient);
+        }
+
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links ul li a {
+            color: #b0b0b0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-left: 14px;
+            font-size: 0.95rem;
+        }
+
+        .footer-links ul li a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 5px;
+            background: var(--secondary-color);
+            border-radius: 50%;
+            opacity: 0.4;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links ul li a:hover {
+            color: var(--secondary-color);
+            padding-left: 20px;
+        }
+
+        .footer-links ul li a:hover::before {
+            opacity: 1;
+        }
+
+        .footer-socials {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .footer-socials h4 {
+            font-size: 1.1rem;
+            margin-bottom: 18px;
+            color: #e8f5e9;
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-socials h4::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -4px;
+            width: 40px;
+            height: 2px;
+            background: var(--secondary-gradient);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-links a {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #b0b0b0;
+        }
+
+        .social-links a:hover {
+            background: var(--secondary-gradient);
+            transform: translateY(-4px);
+            color: #0a0f0a;
+        }
+
+        .social-links i {
+            font-size: 1.1rem;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding: 18px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-bottom p {
+            font-size: 0.85rem;
+            opacity: 0.5;
+        }
+
+        /* ===== FOOTER NOTE ===== */
+        .footer-note {
+            text-align: center;
+            margin-top: 50px;
+            padding: 25px 0 10px;
+            border-top: 1px solid rgba(255, 215, 0, 0.06);
+        }
+
+        .footer-note p {
+            color: var(--secondary-color);
+            font-size: 1.15rem;
+            font-weight: 500;
+        }
+
+        .footer-note .small {
+            color: #888;
+            font-size: 0.9rem;
+            font-weight: 400;
+            margin-top: 4px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .nav-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 75px;
+                left: 0;
+                width: 100%;
+                height: calc(100vh - 75px);
+                background: #0a0f0a;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                padding-top: 50px;
+                clip-path: circle(0px at top right);
+                transition: clip-path 0.5s ease;
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                clip-path: circle(1500px at top right);
+            }
+
+            .nav-links li {
+                margin: 18px 0;
+                opacity: 0;
+                transform: translateY(20px);
+                transition: all 0.3s ease;
+            }
+
+            .nav-links.active li {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo img {
+                height: 35px;
+            }
+            .logo h1 {
+                font-size: 1.2rem;
+            }
+
+            .rules-hero {
+                margin-top: 80px;
+                padding: 20px 0 15px;
+            }
+            .rules-hero h1 {
+                font-size: 2rem;
+            }
+            .rules-hero .subtitle {
+                font-size: 1rem;
+            }
+
+            .rule-category {
+                font-size: 1.4rem;
+            }
+            .rule-title {
+                font-size: 1.1rem;
+            }
+            .rule-text {
+                font-size: 0.95rem;
+                padding-left: 5px;
+            }
+            .rule-details {
+                font-size: 0.9rem;
+                padding-left: 15px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-links {
+                margin-top: 15px;
+            }
+            .footer-links h4::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .footer-links ul li a::before {
+                display: none;
+            }
+            .footer-links ul li a {
+                padding-left: 0;
+            }
+            .footer-links ul li a:hover {
+                padding-left: 0;
+            }
+            .footer-socials h4::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .social-links {
+                justify-content: center;
+            }
+            .footer-note p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo img {
+                height: 28px;
+            }
+            .logo h1 {
+                font-size: 1rem;
+            }
+            .rules-hero h1 {
+                font-size: 1.6rem;
+            }
+            .rules-hero .subtitle {
+                font-size: 0.9rem;
+            }
+            .rule-category {
+                font-size: 1.2rem;
+            }
+            .back-btn {
+                padding: 8px 18px;
+                font-size: 0.8rem;
+            }
+            .rule-title {
+                font-size: 1rem;
+                flex-wrap: wrap;
+            }
+            .rule-text {
+                font-size: 0.9rem;
+            }
+            .rule-details {
+                font-size: 0.85rem;
+                padding-left: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="logo" data-aos="fade-right" data-aos-duration="1000">
+                <img src="Imagines/Anubislogo.png" alt="Anubis Romania Logo">
+                <h1>Anubis<span>Romania</span></h1>
+            </div>
+            <div class="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links">
+                <li data-aos="fade-down" data-aos-delay="100"><a href="index.html">Acasă</a></li>
+                <li data-aos="fade-down" data-aos-delay="200"><a href="index.html#about">Despre</a></li>
+                <li data-aos="fade-down" data-aos-delay="300"><a href="index.html#features">Caracteristici</a></li>
+                <li data-aos="fade-down" data-aos-delay="400"><a href="index.html#gallery">Galerie</a></li>
+                <li data-aos="fade-down" data-aos-delay="500"><a href="index.html#join">Alătură-te</a></li>
+                <li data-aos="fade-down" data-aos-delay="600"><a href="rules.html" class="active">Regulament</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+
+            <!-- Back Button -->
+            <a href="index.html" class="back-btn" data-aos="fade-right">
+                <i class="fas fa-arrow-left"></i> Înapoi la Acasă
+            </a>
+
+            <!-- Rules Hero -->
+            <div class="rules-hero" data-aos="fade-up">
+                <h1 data-aos="fade-right">📜 Regulamentul ANUBIS</h1>
+                <p class="subtitle" data-aos="fade-up" data-aos-delay="150">Respectarea regulilor este esențială pentru o experiență plăcută și echitabilă pentru toți jucătorii.</p>
+                <span class="rule-count" data-aos="fade-up" data-aos-delay="250">📋 40 de reguli principale</span>
+                <p class="last-updated" data-aos="fade-up" data-aos-delay="300">📅 Ultima actualizare: Ianuarie 2026</p>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- INFORMAȚII GENERALE -->
+            <!-- ============================================================ -->
+            <h2 class="rule-category" data-aos="fade-right"><i class="fas fa-info-circle"></i> Informații Generale</h2>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">1</span>
+                    <i class="fas fa-theater-masks"></i> Ce este Roleplay-ul RP
+                </div>
+                <div class="rule-text">
+                    <strong>Roleplay-ul</strong> este simularea vieții reale, pe server. Jucătorii explorează diverse roluri (cetățean, polițist, medic, membru al unei organizații etc.) și interacționează într-un oraș virtual, respectând norme și comportamente asemănătoare celor din lumea reală.
+                </div>
+                <div class="rule-details">
+                    Scopul principal al roleplay-ului este crearea unei povești captivante și realiste, în care fiecare acțiune are consecințe și fiecare interacțiune contribuie la dezvoltarea comunității.
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">2</span>
+                    <i class="fas fa-user"></i> IN CHARACTER (IC)
+                </div>
+                <div class="rule-text">
+                    A fi <strong>"in character"</strong> (în pielea personajului) înseamnă să interpretezi lumea și să iei decizii exclusiv din perspectiva personajului pe care îl controlezi, fără a ține cont de cunoștințele, dorințele sau experiențele tale personale din viața reală.
+                </div>
+                <div class="rule-details">
+                    Personajul tău are propria personalitate, istoric și motivații. Acționează întotdeauna conform acestora.
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">3</span>
+                    <i class="fas fa-user-slash"></i> OUT OF CHARACTER (OOC)
+                </div>
+                <div class="rule-text">
+                    A fi <strong>"out of character"</strong> înseamnă momentul în care ieșiți din "pielea personajului" pe care l-ați creat și redeveniți persoana reală din fața calculatorului.
+                </div>
+                <div class="rule-details">
+                    <strong>Exemple corecte de OOC mascat (acceptate):</strong>
+                    <ul>
+                        <li>"Flexează mușchiul K."</li>
+                        <li>"Intră pe aplicația albastră pentru a vedea înregistrarea."</li>
+                        <li>"Sunt zuguit."</li>
+                    </ul>
+                    <strong>Exemple greșite de OOC mascat (interzise):</strong>
+                    <ul>
+                        <li>"Chem îngerașul."</li>
+                        <li>"Ne auzim noi pe partea cealaltă."</li>
+                        <li>"Permiți chineză?"</li>
+                    </ul>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- REGULI DE BAZĂ RP -->
+            <!-- ============================================================ -->
+            <h2 class="rule-category" data-aos="fade-right"><i class="fas fa-gavel"></i> Reguli de Bază Roleplay</h2>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">4</span>
+                    <i class="fas fa-times-circle"></i> FAIL ROLEPLAY (FRP)
+                </div>
+                <div class="rule-text">
+                    <strong>Fail Roleplay</strong> reprezintă situația în care încercați să impuneți un scenariu Roleplay nerealist sau folosiți intenționat limitările tehnice ale serverului pentru a influența situația în favoarea voastră.
+                </div>
+                <div class="rule-details">
+                    Exemple: sări peste un gard foarte înalt fără un motiv realist, folosești bug-uri pentru a scăpa dintr-o situație, etc.
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">5</span>
+                    <i class="fas fa-skull"></i> NO FEAR (NF)
+                </div>
+                <div class="rule-text">
+                    <strong>No Fear</strong> reprezintă situația în care un jucător nu simulează frica într-o situație roleplay în care aceasta ar fi normală și obligatorie.
+                </div>
+                <div class="rule-details">
+                    Atunci când ești amenințat cu arma, trebuie să simulezi frica și să te conformezi. Ignorarea unei amenințări armate este considerată No Fear.
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">6</span>
+                    <i class="fas fa-user-shield"></i> COP FEAR (CF)
+                </div>
+                <div class="rule-text">
+                    <strong>Cop Fear</strong> este o subramură a No Fear-Ului care presupune simularea realistă a fricii față de organele de poliție.
+                </div>
+                <div class="rule-details">
+                    <ul>
+                        <li>Este strict interzisă luarea în derâdere a organelor de poliție (abuzuri verbale, batjocură, comportament neadecvat).</li>
+                        <li>Ai voie să iei mașina de poliție doar dacă este ultima ta șansă de scăpare, însă ești obligat ca în cel mai scurt timp să o abandonezi. Mașina de medic nu poate fi furată sub nicio formă.</li>
+                        <li>Este interzis Cop-Bait-ul, adică instigarea intenționată a organelor de poliție pentru a fi urmărit (drift-uri intenționate, trecerea cu viteză și claxonarea lângă un polițist).</li>
+                    </ul>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">7</span>
+                    <i class="fas fa-bolt"></i> POWERGAMING (PG)
+                </div>
+                <div class="rule-text">
+                    <strong>Powergaming-ul</strong> apare atunci când un jucător realizează acțiuni care în viața reală ar fi imposibil de efectuat sau supranaturale, limitând astfel capacitatea celorlalți participanți de a contribui realist la scenariu.
+                </div>
+                <div class="rule-details">
+                    Un PG minor, care nu ar schimba desfășurarea roleplay-ului, nu va fi sancționat, deoarece suntem într-un joc virtual și nu putem simula totul ca în viața reală.
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">8</span>
+                    <i class="fas fa-eye"></i> METAGAMING (MG)
+                </div>
+                <div class="rule-text">
+                    <strong>Metagaming-ul</strong> reprezintă acțiunea de a folosi informații OOC în scopuri IC. Altfel spus, utilizarea informațiilor din afara jocului pentru a obține avantaje în joc este strict interzisă.
+                </div>
+                <div class="rule-details">
+                    <strong>Exemple clare:</strong>
+                    <ul>
+                        <li>Dai partajare pe Discord pentru a te sincroniza cu prietenii tăi în joc.</li>
+                        <li>Recunoști o persoană după vocea sa reală, deși personajele voastre nu s-au întâlnit niciodată.</li>
+                        <li>Recunoașterea membrilor unei mafii după îmbrăcăminte.</li>
+                        <li>Folosești tasta <strong>DEL</strong> pentru a vizualiza ID-urile jucătorilor din jur fără un motiv întemeiat.</li>
+                        <li><strong>Streamsniping</strong> &ndash; Urmărirea unui stream pentru a obține informații IC.</li>
+                    </ul>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">9</span>
+                    <i class="fas fa-exchange-alt"></i> MIXING
+                </div>
+                <div class="rule-text">
+                    <strong>Mixing-ul</strong> reprezintă acțiunea de a transmite informații IC prin intermediul chat-ului OOC sau aplicații externe.
+                </div>
+                <div class="rule-details">
+                    <strong>Exemple clare:</strong>
+                    <ul>
+                        <li>Scrii pe chat-ul serverului: "Vând mașini, arme, vă aștept într-o anumită locație".</li>
+                        <li>Îi spui unui prieten să vină să te ia din fața secției de poliție folosind Discord.</li>
+                    </ul>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- REGULI DE CONFRUNTARE -->
+            <!-- ============================================================ -->
+            <h2 class="rule-category" data-aos="fade-right"><i class="fas fa-crosshairs"></i> Reguli de Confruntare</h2>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">10</span>
+                    <i class="fas fa-gun"></i> RANDOM DEATHMATCH (RDM)
+                </div>
+                <div class="rule-text">
+                    <strong>Random Deathmatch</strong> reprezintă omorârea sau atacarea unui jucător fără a avea un motiv bine întemeiat IC.
+                </div>
+                <div class="rule-details">
+                    <strong>Exemplu de RDM:</strong>
+                    <ul>
+                        <li>Ataci sau omori un jucător doar pentru că te-a agresat verbal, fără ca tu să ai o armă.</li>
+                        <li>Percheziționați un jucător și observați că nu are nimic valoros, apoi îl omorâți.</li>
+                    </ul>
+                    <strong>Situații în care ai dreptul să ataci (nu se consideră RDM):</strong>
+                    <ul>
+                        <li>Dacă un jucător nu simulează frica (Non Fear).</li>
+                        <li>Poți ataca doar dacă aceasta reprezintă singura soluție pentru rezolvarea situației.</li>
+                        <li>Dacă ulterior te-a jefuit.</li>
+                        <li>S-a tras deja asupra ta sau este îndreptată o armă în direcția ta.</li>
+                    </ul>
+                    <div class="note">Notă: În pușcărie RDM-ul este permis.</div>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">11</span>
+                    <i class="fas fa-car"></i> VEHICLE DEATHMATCH (VDM)
+                </div>
+                <div class="rule-text">
+                    <strong>Vehicle Deathmatch</strong> reprezintă acțiunea în care un jucător intră intenționat cu mașina într-un alt vehicul sau jucător fără un motiv clar Roleplay.
+                </div>
+                <div class="rule-details">
+                    <div class="note">Notă: Nu se sancționează intrarea cu mașina în alt jucător dacă aceasta reprezintă ultima ta șansă de scăpare dintr-o situație justificată Roleplay.</div>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">12</span>
+                    <i class="fas fa-skull-crossbones"></i> PLAYER KILL (PK) &amp; FACTION KILL (FK) &amp; CHARACTER KILL (CK)
+                </div>
+                <div class="rule-text">
+                    <strong>Player Kill (PK)</strong> &ndash; jucătorul aflat în comă apasă respawn, pierzând informațiile din acel RP.<br>
+                    <strong>Faction Kill (FK)</strong> &ndash; pierderea informațiilor în facțiune.<br>
+                    <strong>Character Kill (CK)</strong> &ndash; eliminarea definitivă a personajului.
+                </div>
+                <div class="rule-details">
+                    <strong>CK:</strong> eliminarea definitivă a unui personaj. Jucătorul este obligat să își creeze un nou personaj, fără nicio legătură cu cel anterior. Aceasta presupune pierderea totală a progresului.
+                    <ul>
+                        <li>CK 1: Avertisment grav cu marcaj special.</li>
+                        <li>CK 2: Pierderea orelor jucate.</li>
+                        <li>CK 3: Pierderea tuturor bunurilor și datelor.</li>
+                    </ul>
+                    <strong>Aplicarea CK:</strong> exclusiv de către sindicat sau în cazuri grave (trădare, jafuri repetate, 5 dosare penale).
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">13</span>
+                    <i class="fas fa-undo-alt"></i> REVENGE KILL (RK)
+                </div>
+                <div class="rule-text">
+                    <strong>Revenge Kill</strong> reprezintă situația în care, după ce ați fost omorât, folosiți respawn și vă întoarceți la locul respectiv în mai puțin de 30 de minute.
+                </div>
+                <div class="rule-details">
+                    <div class="note">Notă: Nu se consideră Revenge Kill situația în care primiți revive de la un medic.</div>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">14</span>
+                    <i class="fas fa-hand-holding-usd"></i> ROB &amp; KILL | KILL &amp; ROB | DROP &amp; KILL
+                </div>
+                <div class="rule-text">
+                    <strong>ROB &amp; KILL</strong> &ndash; jefuiești apoi omori.<br>
+                    <strong>KILL &amp; ROB</strong> &ndash; găsești pe cineva în comă, îl reanimezi apoi îl jefuiești.<br>
+                    <strong>DROP &amp; KILL</strong> &ndash; obligi pe cineva să arunce obiecte apoi îl omori.
+                </div>
+                <div class="rule-details">
+                    <div class="note">Notă: Puteți omorî o persoană după ce ați jefuit-o doar dacă manifestă comportament No Fear.</div>
+                    <strong>Exemplu:</strong> Dacă după ce ați fost jefuit începeți să fiți agresiv verbal și amenințați, omorârea ulterioară <strong>nu</strong> se consideră Rob &amp; Kill.
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- REGULI DE CONDUITĂ -->
+            <!-- ============================================================ -->
+            <h2 class="rule-category" data-aos="fade-right"><i class="fas fa-users"></i> Reguli de Conduită</h2>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">15</span>
+                    <i class="fas fa-car-crash"></i> CONDUSUL NON-RP
+                </div>
+                <div class="rule-text">
+                    Conducerea unui vehicul într-un mod nerealist, cum ar fi deplasarea pe contrasens sau pe autostradă fără un motiv bine întemeiat.
+                </div>
+                <div class="rule-details">
+                    <ul>
+                        <li>Deoarece pe server avem scripturi care te ajută să rolezi automat când faci accident, forțarea limitelor acestor scripturi pentru a face o acțiune nerealistă va fi sancționată.</li>
+                        <li>Este permisă manevra <strong>pit-stop</strong> în condiții de urmărire, dar viteza maximă este de până la 150 km/h. Interzisă pentru vehiculele pe două roți.</li>
+                    </ul>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">16</span>
+                    <i class="fas fa-toilet"></i> ROLEPLAY SCÂRBOS ȘI UMILIRE
+                </div>
+                <div class="rule-text">
+                    <strong>Roleplay-ul scârbos</strong> &ndash; scene de tortură, mutilare, canibalism, necrofilie, abuz sexual, acțiuni de înjosire (scuipat, urinat, expunerea organelor genitale).<br>
+                    <strong>Umilirea</strong> &ndash; forțarea unei persoane să facă acțiuni umilitoare (să repete texte, să facă flotări, să reproducă sunete).
+                </div>
+                <div class="rule-details">
+                    <ul>
+                        <li>Este interzisă umilirea medicilor/polițiștilor on duty.</li>
+                        <li>Este interzis să faci roleplay scârbos fără aprobare sau să forțezi pe cineva.</li>
+                        <li>Este interzisă umilirea după ce a fost jefuit.</li>
+                        <li>Singura metodă validă este folosirea comenzii <strong>/me permiți roleplay scârbos/umilire?</strong> și obținerea acordului.</li>
+                    </ul>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">17</span>
+                    <i class="fas fa-troll"></i> TROLLING
+                </div>
+                <div class="rule-text">
+                    Comportamentul unui jucător care nu intenționează să participe serios la roleplay, ci urmărește să irite, să deranjeze sau să hărțuiască alți jucători.
+                </div>
+                <div class="rule-details">
+                    <ul>
+                        <li>Ear Rape (folosirea excesivă și deranjantă a sunetelor).</li>
+                        <li>Provocarea de accidente în mod repetat și intenționat.</li>
+                        <li>Încălcarea în mod repetat a regulamentului.</li>
+                    </ul>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">18</span>
+                    <i class="fas fa-skull"></i> TOXICITATE
+                </div>
+                <div class="rule-text">
+                    Comportamentul toxic care perturbă calitatea roleplay-ului și afectează negativ comunitatea.
+                </div>
+                <div class="rule-details">
+                    <ul>
+                        <li>Injuriile IC exagerate fără context IC anterior.</li>
+                        <li>Acuzațiile de favoritism aduse staff-ului fără dovezi.</li>
+                        <li>Instigarea la ură sau certuri OOC pe baza acțiunilor IC.</li>
+                    </ul>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">19</span>
+                    <i class="fas fa-ban"></i> TOLERANȚĂ ZERO (ZT)
+                </div>
+                <div class="rule-text">
+                    Lipsa totală de respect față de comunitate și regulament, prin încălcarea repetată și constantă a regulilor, precum și o atitudine toxică și sfidătoare.
+                </div>
+                <div class="rule-details">
+                    <strong>Criterii:</strong>
+                    <ul>
+                        <li>Jucători cu număr foarte mare de sancțiuni.</li>
+                        <li>Jucători care adună multe sancțiuni într-o perioadă scurtă.</li>
+                        <li>Jucători care au avut deja mai multe ban-uri.</li>
+                    </ul>
+                    <strong>Sancțiuni:</strong> Ban 7 zile, Ban 14 zile, Ban 90 zile, Ban permanent.<br>
+                    <div class="note">Ne rezervăm dreptul de a aplica direct ban permanent.</div>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">20</span>
+                    <i class="fas fa-socks"></i> LOW EFFORT ROLEPLAY (LER)
+                </div>
+                <div class="rule-text">
+                    Situațiile în care nu depuneți efort minim, interes sau refuzați să interacționați într-un scenariu Roleplay.
+                </div>
+                <div class="rule-details">
+                    <strong>Exemple:</strong>
+                    <ul>
+                        <li>Vă ciocniți în trafic și părăsiți locul accidentului fără interacțiune.</li>
+                        <li>Solicitați un serviciu fără a descrie clar situația.</li>
+                        <li>Rețineți un alt jucător mai mult de două ore exclusiv pentru amuzament.</li>
+                    </ul>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- REGULI ADMINISTRATIVE -->
+            <!-- ============================================================ -->
+            <h2 class="rule-category" data-aos="fade-right"><i class="fas fa-user-tie"></i> Reguli Administrative</h2>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">21</span>
+                    <i class="fas fa-ticket-alt"></i> TICKET ÎN ROLEPLAY
+                </div>
+                <div class="rule-text">
+                    Situația în care ești implicat într-un scenariu activ de roleplay și alegi să apelezi la staff printr-un ticket în timpul acțiunii.
+                </div>
+                <div class="rule-details">
+                    <ul>
+                        <li>Permis exclusiv în situații de <strong>trolling</strong> major sau <strong>roleplay scârbos</strong> exagerat.</li>
+                        <li>Deschiderea unui ticket și ne-răspunderea se sancționează cu "AFK la ticket".</li>
+                    </ul>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">22</span>
+                    <i class="fas fa-times"></i> TICKET AIUREA
+                </div>
+                <div class="rule-text">
+                    Orice solicitare nefondată adresată echipei staff, formulată sub forma acțiunilor de tip "dă-mi" (revive, mașină, bani).
+                </div>
+                <div class="rule-details">
+                    Deschiderea unui ticket fără un motiv întemeiat se sancționează cu "ticket aiurea".
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">23</span>
+                    <i class="fas fa-laptop-code"></i> HACK
+                </div>
+                <div class="rule-text">
+                    Folosirea de programe/fișiere care oferă orice avantaj față de un jucător obișnuit. Sancțiune: Ban 90 de zile.
+                </div>
+                <div class="rule-details">
+                    <ul>
+                        <li>Dacă ați folosit hack pe alt server, trebuie să reinstalați Windows-ul.</li>
+                        <li>Neraportarea unei persoane care folosește hack se sancționează.</li>
+                        <li>Distribuirea de programe care oferă avantaje se sancționează.</li>
+                    </ul>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">24</span>
+                    <i class="fas fa-plug"></i> DISCONNECT ÎN RP
+                </div>
+                <div class="rule-text">
+                    Momentul în care ieșiți de pe server în timpul unui roleplay sau când sunteți conștient că urmează să faceți parte dintr-un roleplay.
+                </div>
+                <div class="rule-details">
+                    <ul>
+                        <li>În caz de crash sau cădere internet, trebuie să anunțați imediat pe Discord.</li>
+                        <li>Este interzis să vă deconectați în timpul bătăilor, în zone rău famate, pentru a evita un RP.</li>
+                    </ul>
+                    <div class="note">Notă: Respawn-ul nu este considerat disconnect în RP.</div>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">25</span>
+                    <i class="fas fa-bed"></i> AFK ÎN ROLEPLAY
+                </div>
+                <div class="rule-text">
+                    Situația în care jucătorul stă inactiv într-o zonă roșie sau gri și poate fi jefuit sau într-o zonă verde unde ar trebui să fie interacționat.
+                </div>
+                <div class="rule-details">
+                    Dacă sunteți AFK într-o zonă de conflict, puteți fi jefuit sau eliminat.
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- REGULI SUPLIMENTARE -->
+            <!-- ============================================================ -->
+            <h2 class="rule-category" data-aos="fade-right"><i class="fas fa-plus-circle"></i> Reguli Suplimentare</h2>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">26</span>
+                    <i class="fas fa-handshake"></i> CORUPȚIA
+                </div>
+                <div class="rule-text">
+                    Momentul în care faci parte din structuri legale și, datorită statutului tău, îți însușești bunuri, distribui informații confidențiale sau comiți ilegalități.
+                </div>
+                <div class="rule-details">
+                    <strong>Exemple Poliție:</strong>
+                    <ul>
+                        <li>Modificarea sau ștergerea rapoartelor MDT.</li>
+                        <li>Deținerea de arme care nu aparțin Poliției.</li>
+                    </ul>
+                    <strong>Exemple Medici:</strong>
+                    <ul>
+                        <li>Întârzierea intenționată a revive-ului.</li>
+                        <li>Acordarea de ajutor persoanelor înarmate fără implicarea Poliției.</li>
+                    </ul>
+                    <div class="note">Sancțiunea variază de la avertisment intern până la excludere.</div>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">27</span>
+                    <i class="fas fa-user-graduate"></i> POST-HUNT
+                </div>
+                <div class="rule-text">
+                    Reclamații repetate împotriva altor jucători fără un motiv clar și justificat.
+                </div>
+                <div class="rule-details">
+                    <ul>
+                        <li>Înainte să deschideți o reclamație, asigurați-vă că aveți un motiv serios.</li>
+                        <li>Reclamațiile repetate fără un motiv real atrag sancțiuni asupra voastră.</li>
+                    </ul>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">28</span>
+                    <i class="fas fa-hand-holding-usd"></i> SCAM IC
+                </div>
+                <div class="rule-text">
+                    Înșelarea unei persoane când îi promiteți bani/bunuri în schimb, iar ulterior nu respectați înțelegerea.
+                </div>
+                <div class="rule-details">
+                    <ul>
+                        <li>Nu se consideră scam împrumutul voluntar.</li>
+                        <li>Nu se consideră scam vânzarea unui bun la sumă mică pentru a evita taxele.</li>
+                        <li>Complicitatea se sancționează cu aceeași pedeapsă.</li>
+                    </ul>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">29</span>
+                    <i class="fas fa-handshake"></i> ALIANȚE
+                </div>
+                <div class="rule-text">
+                    Momentul în care o organizație se aliaza voit cu alta pentru a comite ilegalități.
+                </div>
+                <div class="rule-details">
+                    <ul>
+                        <li>Mafiile/gang-urile nu au voie să formeze alianțe între ele decât dacă sunt îndrumate de Sindicat.</li>
+                        <li>Mafioții/civilii/gang-urile <strong>nu au voie să intervină</strong> în conflictele dintre cealaltă parte și poliție.</li>
+                        <li>Toate mafiile au voie să colaboreze pentru a salva un membru al Sindicatului.</li>
+                    </ul>
+                    <div class="note">Se sancționează fiecare membru implicat în alianță.</div>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">30</span>
+                    <i class="fas fa-money-bill-wave"></i> JAFURI
+                </div>
+                <div class="rule-text">
+                    Reguli pentru desfășurarea jafului la bancă, magazine și bancomate.
+                </div>
+                <div class="rule-details">
+                    <ul>
+                        <li>Bancă: minim <strong>2 jucători înarmați cu armă de foc</strong>.</li>
+                        <li>Magazine: maxim <strong>2 jucători înarmați cu armă de foc</strong>.</li>
+                        <li>Bancomate: maxim <strong>6 jucători înarmați cu armă de foc</strong>.</li>
+                        <li>Este <strong>interzis</strong> să blocați accesul în clădiri cu mașini.</li>
+                        <li>Revenirea la jaf după ce ați fost omorât se sancționează.</li>
+                        <li><strong>Jafurile cu ostatici nu sunt permise.</strong></li>
+                    </ul>
+                    <div class="note">Arma poate fi scoasă doar după începerea efectivă a jafului.</div>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">31</span>
+                    <i class="fas fa-film"></i> FILMARE OBLIGATORIE
+                </div>
+                <div class="rule-text">
+                    Este <strong>obligatoriu</strong> să aveți o <strong>filmare</strong> pentru fiecare confruntare în care folosiți o <strong>armă de foc</strong>.
+                </div>
+                <div class="rule-details">
+                    <ul>
+                        <li>Calitate minimă <strong>720p</strong>.</li>
+                        <li>Trebuie să includă <strong>sunet</strong>.</li>
+                        <li>Păstrată pentru <strong>48 de ore</strong>.</li>
+                    </ul>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">32</span>
+                    <i class="fas fa-user-slash"></i> NUME OOC INTERZIS &amp; LIMBAJ VULGAR
+                </div>
+                <div class="rule-text">
+                    Numele care conțin cuvinte obscene/ofensatoare sunt interzise. Limbajul vulgar OOC este interzis pe orice chat.
+                </div>
+                <div class="rule-details">
+                    Se aplică și pe voice chat dacă se deschide OOC sau sunteți la un ticket.
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">33</span>
+                    <i class="fas fa-gavel"></i> RECLAMĂ
+                </div>
+                <div class="rule-text">
+                    Promovarea unei alte comunități prin nume, chat sau voice chat IC.
+                </div>
+                <div class="rule-details">
+                    Se sancționează gradual cu kick, mute, admin jail.
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">34</span>
+                    <i class="fas fa-user-slash"></i> BAN EVADE
+                </div>
+                <div class="rule-text">
+                    Conectarea pe server de pe un alt cont în timp ce sunteți banat pe contul principal.
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">35</span>
+                    <i class="fas fa-exclamation-triangle"></i> MAFIA/GANG WARN
+                </div>
+                <div class="rule-text">
+                    Se acordă un avertisment unei mafii/gang în urma unui ticket în care au fost sancționați cel puțin 3 membri.
+                </div>
+                <div class="rule-details">
+                    La acumularea a 3/3 warn-uri, mafia/gang-ul are la dispoziție 24 de ore pentru a achita penalizarea; în caz contrar, organizația va fi <strong>desființată</strong>.
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">36</span>
+                    <i class="fas fa-video"></i> OBSTRUCȚIONARE HUD
+                </div>
+                <div class="rule-text">
+                    Este strict interzis să îți acoperi, ascunzi sau maschezi în orice mod ID-ul sau HUD-ul în filmări (crop, blur, sticker/emoji, bară neagră, overlay).
+                </div>
+                <div class="rule-details">
+                    Orice dovadă trebuie să fie curată, completă și lizibilă, cu HUD-ul vizibil.
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">37</span>
+                    <i class="fas fa-share-alt"></i> DISTRIBUIRE TICKET
+                </div>
+                <div class="rule-text">
+                    Distribuirea publică a unei filmări realizate în cadrul unui ticket este interzisă.
+                </div>
+                <div class="rule-details">
+                    Filmările trebuie setate ca <strong>nepublice</strong> sau <strong>accesibile doar prin link</strong>.
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">38</span>
+                    <i class="fas fa-user-friends"></i> SHARE ACCOUNT
+                </div>
+                <div class="rule-text">
+                    Transferul, vânzarea, cumpărarea sau partajarea contului către o altă persoană.
+                </div>
+                <div class="rule-details">
+                    <ul>
+                        <li>Dacă contul este spart, sancțiunile rămân valabile.</li>
+                        <li>Este obligatoriu să faceți un ticket pe Discord dacă contul a fost compromis.</li>
+                    </ul>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">39</span>
+                    <i class="fas fa-coins"></i> TRANZACȚII OOC
+                </div>
+                <div class="rule-text">
+                    Tranzacțiile OOC nu sunt permise sub nicio formă.
+                </div>
+                <div class="rule-details">
+                    <strong>Singura metodă acceptată este printr-un ticket de donație pe Discord.</strong>
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <div class="rule-section" data-aos="fade-up">
+                <div class="rule-title">
+                    <span class="rule-number">40</span>
+                    <i class="fas fa-hand-holding-usd"></i> DISTRIBUIRE DE AVERE
+                </div>
+                <div class="rule-text">
+                    Transferul de sume mari de bani, bunuri, vehicule sau case către alt jucător fără justificare IC.
+                </div>
+                <div class="rule-details">
+                    Se sancționează în funcție de gravitatea situației.
+                </div>
+                <hr class="rule-divider">
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- FOOTER NOTE -->
+            <!-- ============================================================ -->
+            <div class="footer-note" data-aos="fade-up">
+                <p>⚖️ Regulamentul poate suferi modificări</p>
+                <p class="small">Te rugăm să verifici periodic actualizările.</p>
+                <p class="small" style="margin-top:4px;">📅 Ultima actualizare: Ianuarie 2026</p>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="Imagines/Anubislogo.png" alt="Anubis Romania Logo">
+                    <h3>Anubis <span>Romania</span></h3>
+                    <p>🏛️ Experiență Premium de Roleplay FiveM</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Link-uri Rapide</h4>
+                    <ul>
+                        <li><a href="rules.html">Regulament</a></li>
+                    </ul>
+                </div>
+                <div class="footer-socials">
+                    <h4>Conectează-te Cu Noi</h4>
+                    <div class="social-links">
+                        <a href="https://discord.gg/aJh5SjnGv" target="_blank"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Anubis Romania. Toate Drepturile Rezervate.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 700,
+            easing: 'ease',
+            once: false,
+            mirror: false
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile navigation toggle
+            const navToggle = document.querySelector('.nav-toggle');
+            const navLinks = document.querySelector('.nav-links');
+
+            navToggle.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+                this.querySelector('i').classList.toggle('fa-bars');
+                this.querySelector('i').classList.toggle('fa-times');
+            });
+
+            // Close mobile nav when clicking on a link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    navToggle.querySelector('i').classList.add('fa-bars');
+                    navToggle.querySelector('i').classList.remove('fa-times');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
