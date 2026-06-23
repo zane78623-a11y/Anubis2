@@ -1,6 +1,6 @@
 /* ========================================
    ANUBIS ROMANIA - AUTH SYSTEM
-   Cu JSONBin.io
+   Cu localStorage + sync JSONBin
    ======================================== */
 
 const AUTH_CONFIG = {
@@ -15,11 +15,27 @@ class AuthSystem {
         this.users = {};
         this.currentUser = null;
         this.nextId = 1;
+        this.syncEnabled = false;
         this.init();
     }
 
     // ===== LOAD DATA =====
     async loadData() {
+        // Încarcă din localStorage
+        const stored = localStorage.getItem(AUTH_CONFIG.STORAGE_KEY);
+        if (stored) {
+            try {
+                this.users = JSON.parse(stored);
+                const nextIdStored = localStorage.getItem('anubis_nextId');
+                this.nextId = nextIdStored ? parseInt(nextIdStored) : Object.keys(this.users).length + 1;
+                console.log('✅ Date încărcate din localStorage! Utilizatori:', Object.keys(this.users).length);
+                return;
+            } catch (e) {
+                console.warn('⚠️ Eroare parsing localStorage:', e);
+            }
+        }
+
+        // Dacă nu sunt date în localStorage, încearcă JSONBin
         try {
             const response = await fetch(`https://api.jsonbin.io/v3/b/${AUTH_CONFIG.BIN_ID}/latest`, {
                 headers: {
@@ -27,67 +43,36 @@ class AuthSystem {
                 }
             });
             
-            if (!response.ok) {
-                console.warn('⚠️ JSONBin error:', response.status);
-                const stored = localStorage.getItem(AUTH_CONFIG.STORAGE_KEY);
-                if (stored) {
-                    this.users = JSON.parse(stored);
-                    // Încearcă să recuperezi nextId
-                    const nextIdStored = localStorage.getItem('anubis_nextId');
-                    this.nextId = nextIdStored ? parseInt(nextIdStored) : Object.keys(this.users).length + 1;
-                } else {
-                    this.users = {
-                        '1': {
-                            id: '1',
-                            name: 'Administrator',
-                            password: 'hash_12345',
-                            rank: 'owner',
-                            ip: '',
-                            createdAt: new Date().toISOString(),
-                            lastLogin: new Date().toISOString()
-                        }
-                    };
-                    this.nextId = 2;
-                }
-                return;
-            }
-            
-            const data = await response.json();
-            this.users = data.record.users || {};
-            this.nextId = data.record.nextId || Object.keys(this.users).length + 1;
-            
-            localStorage.setItem(AUTH_CONFIG.STORAGE_KEY, JSON.stringify(this.users));
-            localStorage.setItem('anubis_nextId', String(this.nextId));
-            console.log('✅ Date încărcate! Utilizatori:', Object.keys(this.users).length);
-        } catch (e) {
-            console.warn('⚠️ Eroare încărcare:', e.message);
-            const stored = localStorage.getItem(AUTH_CONFIG.STORAGE_KEY);
-            if (stored) {
-                try {
-                    this.users = JSON.parse(stored);
-                    const nextIdStored = localStorage.getItem('anubis_nextId');
-                    this.nextId = nextIdStored ? parseInt(nextIdStored) : Object.keys(this.users).length + 1;
-                } catch {
-                    this.users = {};
-                }
-            }
-            if (Object.keys(this.users).length === 0) {
-                this.users = {
-                    '1': {
-                        id: '1',
-                        name: 'Administrator',
-                        password: 'hash_12345',
-                        rank: 'owner',
-                        ip: '',
-                        createdAt: new Date().toISOString(),
-                        lastLogin: new Date().toISOString()
-                    }
-                };
-                this.nextId = 2;
+            if (response.ok) {
+                const data = await response.json();
+                this.users = data.record.users || {};
+                this.nextId = data.record.nextId || Object.keys(this.users).length + 1;
+                this.syncEnabled = true;
                 localStorage.setItem(AUTH_CONFIG.STORAGE_KEY, JSON.stringify(this.users));
                 localStorage.setItem('anubis_nextId', String(this.nextId));
+                console.log('✅ Date încărcate din JSONBin! Utilizatori:', Object.keys(this.users).length);
+                return;
             }
+        } catch (e) {
+            console.warn('⚠️ JSONBin indisponibil:', e.message);
         }
+
+        // Fallback - creează admin default
+        this.users = {
+            '1': {
+                id: '1',
+                name: 'Administrator',
+                password: 'hash_12345',
+                rank: 'owner',
+                ip: '',
+                createdAt: new Date().toISOString(),
+                lastLogin: new Date().toISOString()
+            }
+        };
+        this.nextId = 2;
+        localStorage.setItem(AUTH_CONFIG.STORAGE_KEY, JSON.stringify(this.users));
+        localStorage.setItem('anubis_nextId', String(this.nextId));
+        console.log('✅ Admin default creat!');
     }
 
     // ===== SAVE USERS =====
@@ -111,12 +96,13 @@ class AuthSystem {
             });
             
             if (response.ok) {
+                this.syncEnabled = true;
                 console.log('✅ Date salvate în JSONBin!');
             } else {
-                console.warn('⚠️ JSONBin error:', response.status, '- date salvate local');
+                console.warn('⚠️ JSONBin error:', response.status);
             }
         } catch (e) {
-            console.warn('⚠️ JSONBin offline, date salvate local');
+            console.warn('⚠️ JSONBin indisponibil, date salvate local');
         }
     }
 
@@ -323,6 +309,13 @@ class AuthSystem {
         delete this.users[entry[0]];
         await this.saveUsers();
         return { success: true, message: username + ' a fost șters!' };
+    }
+
+    // ===== FORCE SYNC =====
+    async forceSync() {
+        console.log('🔄 Sincronizare forțată...');
+        await this.saveUsers();
+        console.log('✅ Sincronizare completă!');
     }
 
     // ===== INIT =====
