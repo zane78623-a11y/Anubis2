@@ -1,13 +1,13 @@
 /* ========================================
    ANUBIS ROMANIA - AUTH SYSTEM
-   Cu backend JSONBin.io (ID-uri UNICE)
+   Cu JSONBin.io
    ======================================== */
 
 const AUTH_CONFIG = {
     STORAGE_KEY: 'anubis_users',
     SESSION_KEY: 'anubis_session',
-    BIN_ID: '6a3aecc3da38895dfef3d556 ', // Înlocuiește cu ID-ul tău
-    API_KEY: '$2a$10$MC5ImcAicGDSo1A0pL.MkuYbjtPWc0LiDUZrttcGwPvkhjynCKHd6' // Înlocuiește cu cheia ta
+    BIN_ID: '6a3aecc3da38895dfef3d556',
+    API_KEY: '$2a$10$52mhwmpPmpXndDIYVZRhiiOfHtciYfJxDmdIWmdHPo65DLWMeBlu'
 };
 
 class AuthSystem {
@@ -15,46 +15,90 @@ class AuthSystem {
         this.users = {};
         this.currentUser = null;
         this.nextId = 1;
-        this.loading = true;
         this.init();
     }
 
+    // ===== LOAD DATA =====
     async loadData() {
         try {
-            const response = await fetch(`https://api.jsonbin.io/v3/b/${AUTH_CONFIG.BIN_ID}`, {
+            const response = await fetch(`https://api.jsonbin.io/v3/b/${AUTH_CONFIG.BIN_ID}/latest`, {
                 headers: {
                     'X-Master-Key': AUTH_CONFIG.API_KEY
                 }
             });
+            
+            if (!response.ok) {
+                console.warn('⚠️ JSONBin error:', response.status);
+                const stored = localStorage.getItem(AUTH_CONFIG.STORAGE_KEY);
+                if (stored) {
+                    this.users = JSON.parse(stored);
+                    // Încearcă să recuperezi nextId
+                    const nextIdStored = localStorage.getItem('anubis_nextId');
+                    this.nextId = nextIdStored ? parseInt(nextIdStored) : Object.keys(this.users).length + 1;
+                } else {
+                    this.users = {
+                        '1': {
+                            id: '1',
+                            name: 'Administrator',
+                            password: 'hash_12345',
+                            rank: 'owner',
+                            ip: '',
+                            createdAt: new Date().toISOString(),
+                            lastLogin: new Date().toISOString()
+                        }
+                    };
+                    this.nextId = 2;
+                }
+                return;
+            }
+            
             const data = await response.json();
             this.users = data.record.users || {};
-            this.nextId = data.record.nextId || 1;
+            this.nextId = data.record.nextId || Object.keys(this.users).length + 1;
             
-            // Salvează local pentru backup
             localStorage.setItem(AUTH_CONFIG.STORAGE_KEY, JSON.stringify(this.users));
-            console.log('✅ Date încărcate din JSONBin! Utilizatori:', Object.keys(this.users).length);
+            localStorage.setItem('anubis_nextId', String(this.nextId));
+            console.log('✅ Date încărcate! Utilizatori:', Object.keys(this.users).length);
         } catch (e) {
-            console.error('❌ Eroare încărcare date JSONBin:', e);
-            // Fallback la localStorage
+            console.warn('⚠️ Eroare încărcare:', e.message);
             const stored = localStorage.getItem(AUTH_CONFIG.STORAGE_KEY);
             if (stored) {
                 try {
                     this.users = JSON.parse(stored);
+                    const nextIdStored = localStorage.getItem('anubis_nextId');
+                    this.nextId = nextIdStored ? parseInt(nextIdStored) : Object.keys(this.users).length + 1;
                 } catch {
                     this.users = {};
                 }
             }
+            if (Object.keys(this.users).length === 0) {
+                this.users = {
+                    '1': {
+                        id: '1',
+                        name: 'Administrator',
+                        password: 'hash_12345',
+                        rank: 'owner',
+                        ip: '',
+                        createdAt: new Date().toISOString(),
+                        lastLogin: new Date().toISOString()
+                    }
+                };
+                this.nextId = 2;
+                localStorage.setItem(AUTH_CONFIG.STORAGE_KEY, JSON.stringify(this.users));
+                localStorage.setItem('anubis_nextId', String(this.nextId));
+            }
         }
-        this.loading = false;
     }
 
+    // ===== SAVE USERS =====
     async saveUsers() {
         // Salvează local
         localStorage.setItem(AUTH_CONFIG.STORAGE_KEY, JSON.stringify(this.users));
+        localStorage.setItem('anubis_nextId', String(this.nextId));
         
-        // Salvează în JSONBin
+        // Încearcă să salveze în JSONBin
         try {
-            await fetch(`https://api.jsonbin.io/v3/b/${AUTH_CONFIG.BIN_ID}`, {
+            const response = await fetch(`https://api.jsonbin.io/v3/b/${AUTH_CONFIG.BIN_ID}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -65,12 +109,18 @@ class AuthSystem {
                     nextId: this.nextId
                 })
             });
-            console.log('✅ Date salvate în JSONBin!');
+            
+            if (response.ok) {
+                console.log('✅ Date salvate în JSONBin!');
+            } else {
+                console.warn('⚠️ JSONBin error:', response.status, '- date salvate local');
+            }
         } catch (e) {
-            console.error('❌ Eroare salvare în JSONBin:', e);
+            console.warn('⚠️ JSONBin offline, date salvate local');
         }
     }
 
+    // ===== HASH PASSWORD =====
     hashPassword(password) {
         let hash = 0;
         for (let i = 0; i < password.length; i++) {
@@ -80,12 +130,14 @@ class AuthSystem {
         return 'hash_' + hash;
     }
 
+    // ===== GENERATE ID =====
     generateId() {
         const id = String(this.nextId);
         this.nextId++;
         return id;
     }
 
+    // ===== GET IP =====
     async getIP() {
         try {
             const response = await fetch('https://api.ipify.org?format=json');
@@ -96,6 +148,7 @@ class AuthSystem {
         }
     }
 
+    // ===== REGISTER =====
     async register(name, password) {
         await this.loadData();
         
@@ -121,6 +174,7 @@ class AuthSystem {
         return { success: true, message: 'Cont creat! ID: ' + id, id: id };
     }
 
+    // ===== LOGIN =====
     async login(name, password) {
         await this.loadData();
         
@@ -154,32 +208,39 @@ class AuthSystem {
         return { success: true, user: this.currentUser };
     }
 
+    // ===== LOGOUT =====
     logout() {
         this.currentUser = null;
         localStorage.removeItem(AUTH_CONFIG.SESSION_KEY);
         window.location.href = 'index.html';
     }
 
+    // ===== IS LOGGED IN =====
     isLoggedIn() {
         return this.currentUser !== null;
     }
 
+    // ===== IS STAFF =====
     isStaff() {
         return this.currentUser && ['staff', 'head_staff', 'admin', 'owner'].includes(this.currentUser.rank);
     }
 
+    // ===== IS HEAD STAFF =====
     isHeadStaff() {
         return this.currentUser && ['head_staff', 'admin', 'owner'].includes(this.currentUser.rank);
     }
 
+    // ===== IS ADMIN =====
     isAdmin() {
         return this.currentUser && ['admin', 'owner'].includes(this.currentUser.rank);
     }
 
+    // ===== IS OWNER =====
     isOwner() {
         return this.currentUser && this.currentUser.rank === 'owner';
     }
 
+    // ===== GET RANK LABEL =====
     getRankLabel(rank) {
         const labels = {
             'owner': '👑 Owner',
@@ -191,6 +252,7 @@ class AuthSystem {
         return labels[rank] || rank;
     }
 
+    // ===== GET RANK COLOR =====
     getRankColor(rank) {
         const colors = {
             'owner': '#ffd700',
@@ -202,10 +264,12 @@ class AuthSystem {
         return colors[rank] || '#8a9a8a';
     }
 
+    // ===== GET ALL USERS =====
     getAllUsers() {
         return Object.values(this.users);
     }
 
+    // ===== PROMOTE USER =====
     async promoteUser(username) {
         await this.loadData();
         
@@ -223,6 +287,7 @@ class AuthSystem {
         return { success: true, message: username + ' promovat la ' + this.getRankLabel(user.rank) };
     }
 
+    // ===== DEMOTE USER =====
     async demoteUser(username) {
         await this.loadData();
         
@@ -244,6 +309,7 @@ class AuthSystem {
         return { success: true, message: username + ' retrogradat la ' + this.getRankLabel(user.rank) };
     }
 
+    // ===== DELETE USER =====
     async deleteUser(username) {
         await this.loadData();
         
@@ -259,17 +325,15 @@ class AuthSystem {
         return { success: true, message: username + ' a fost șters!' };
     }
 
+    // ===== INIT =====
     async init() {
         await this.loadData();
         
-        // Verifică sesiunea
         const session = localStorage.getItem(AUTH_CONFIG.SESSION_KEY);
         if (session) {
             try {
                 this.currentUser = JSON.parse(session);
-                // Verifică dacă utilizatorul mai există
-                const user = this.users[this.currentUser.id];
-                if (!user) {
+                if (!this.users[this.currentUser.id]) {
                     this.currentUser = null;
                     localStorage.removeItem(AUTH_CONFIG.SESSION_KEY);
                 }
@@ -289,4 +353,4 @@ class AuthSystem {
 }
 
 window.auth = new AuthSystem();
-console.log('✅ Auth System încărcat cu JSONBin!');
+console.log('✅ Auth System încărcat!');
