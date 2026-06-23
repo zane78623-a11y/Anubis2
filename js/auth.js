@@ -7,7 +7,7 @@ const AUTH_CONFIG = {
     STORAGE_KEY: 'anubis_users',
     SESSION_KEY: 'anubis_session',
     BIN_ID: '6a3aecc3da38895dfef3d556 ', // Înlocuiește cu ID-ul tău
-    API_KEY: '$2a$10$52mhwmPmpXnDDIYVZRHiiOfHTfciiYfJxDmdIWmdHPo65DLWMeBIu' // Înlocuiește cu cheia ta
+    API_KEY: '$2a$10$MC5ImcAicGDSo1A0pL.MkuYbjtPWc0LiDUZrttcGwPvkhjynCKHd6' // Înlocuiește cu cheia ta
 };
 
 class AuthSystem {
