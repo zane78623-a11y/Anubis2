@@ -1,64 +1,73 @@
 /* ========================================
    ANUBIS ROMANIA - AUTH SYSTEM
+   Cu backend JSONBin.io (ID-uri UNICE)
    ======================================== */
 
 const AUTH_CONFIG = {
     STORAGE_KEY: 'anubis_users',
-    SESSION_KEY: 'anubis_session'
+    SESSION_KEY: 'anubis_session',
+    BIN_ID: '6a3aecc3da38895dfef3d556 ', // Înlocuiește cu ID-ul tău
+    API_KEY: '$2a$10$52mhwmPmpXnDDIYVZRHiiOfHTfciiYfJxDmdIWmdHPo65DLWMeBIu' // Înlocuiește cu cheia ta
 };
 
 class AuthSystem {
     constructor() {
         this.users = {};
         this.currentUser = null;
-        this.loadData();
+        this.nextId = 1;
+        this.loading = true;
         this.init();
     }
 
-    loadData() {
-        const stored = localStorage.getItem(AUTH_CONFIG.STORAGE_KEY);
-        if (stored) {
-            try {
-                this.users = JSON.parse(stored);
-            } catch {
-                this.users = {};
-            }
-        }
-        
-        if (Object.keys(this.users).length === 0) {
-            this.users = {
-                '1': {
-                    id: '1',
-                    name: 'Administrator',
-                    password: 'hash_12345',
-                    rank: 'owner',
-                    ip: '127.0.0.1',
-                    createdAt: new Date().toISOString(),
-                    lastLogin: new Date().toISOString()
+    async loadData() {
+        try {
+            const response = await fetch(`https://api.jsonbin.io/v3/b/${AUTH_CONFIG.BIN_ID}`, {
+                headers: {
+                    'X-Master-Key': AUTH_CONFIG.API_KEY
                 }
-            };
-            this.saveUsers();
-        }
-        
-        const session = localStorage.getItem(AUTH_CONFIG.SESSION_KEY);
-        if (session) {
-            try {
-                this.currentUser = JSON.parse(session);
-            } catch {
-                this.currentUser = null;
+            });
+            const data = await response.json();
+            this.users = data.record.users || {};
+            this.nextId = data.record.nextId || 1;
+            
+            // Salvează local pentru backup
+            localStorage.setItem(AUTH_CONFIG.STORAGE_KEY, JSON.stringify(this.users));
+            console.log('✅ Date încărcate din JSONBin! Utilizatori:', Object.keys(this.users).length);
+        } catch (e) {
+            console.error('❌ Eroare încărcare date JSONBin:', e);
+            // Fallback la localStorage
+            const stored = localStorage.getItem(AUTH_CONFIG.STORAGE_KEY);
+            if (stored) {
+                try {
+                    this.users = JSON.parse(stored);
+                } catch {
+                    this.users = {};
+                }
             }
         }
+        this.loading = false;
     }
 
-    saveUsers() {
+    async saveUsers() {
+        // Salvează local
         localStorage.setItem(AUTH_CONFIG.STORAGE_KEY, JSON.stringify(this.users));
-    }
-
-    saveSession() {
-        if (this.currentUser) {
-            localStorage.setItem(AUTH_CONFIG.SESSION_KEY, JSON.stringify(this.currentUser));
-        } else {
-            localStorage.removeItem(AUTH_CONFIG.SESSION_KEY);
+        
+        // Salvează în JSONBin
+        try {
+            await fetch(`https://api.jsonbin.io/v3/b/${AUTH_CONFIG.BIN_ID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': AUTH_CONFIG.API_KEY
+                },
+                body: JSON.stringify({
+                    users: this.users,
+                    nextId: this.nextId
+                })
+            });
+            console.log('✅ Date salvate în JSONBin!');
+        } catch (e) {
+            console.error('❌ Eroare salvare în JSONBin:', e);
         }
     }
 
@@ -72,9 +81,9 @@ class AuthSystem {
     }
 
     generateId() {
-        const ids = Object.keys(this.users).map(Number);
-        const maxId = ids.length > 0 ? Math.max(...ids) : 0;
-        return String(maxId + 1);
+        const id = String(this.nextId);
+        this.nextId++;
+        return id;
     }
 
     async getIP() {
@@ -88,6 +97,8 @@ class AuthSystem {
     }
 
     async register(name, password) {
+        await this.loadData();
+        
         const exists = Object.values(this.users).find(u => u.name.toLowerCase() === name.toLowerCase());
         if (exists) {
             return { success: false, message: 'Numele există deja!' };
@@ -106,11 +117,13 @@ class AuthSystem {
             lastLogin: new Date().toISOString()
         };
 
-        this.saveUsers();
-        return { success: true, message: 'Cont creat!', id: id };
+        await this.saveUsers();
+        return { success: true, message: 'Cont creat! ID: ' + id, id: id };
     }
 
     async login(name, password) {
+        await this.loadData();
+        
         const entry = Object.entries(this.users).find(([id, u]) => 
             u.name.toLowerCase() === name.toLowerCase()
         );
@@ -128,7 +141,7 @@ class AuthSystem {
         const ip = await this.getIP();
         user.ip = ip;
         user.lastLogin = new Date().toISOString();
-        this.saveUsers();
+        await this.saveUsers();
 
         this.currentUser = {
             id: id,
@@ -137,7 +150,7 @@ class AuthSystem {
             ip: ip
         };
 
-        this.saveSession();
+        localStorage.setItem(AUTH_CONFIG.SESSION_KEY, JSON.stringify(this.currentUser));
         return { success: true, user: this.currentUser };
     }
 
@@ -152,7 +165,11 @@ class AuthSystem {
     }
 
     isStaff() {
-        return this.currentUser && ['staff', 'admin', 'owner'].includes(this.currentUser.rank);
+        return this.currentUser && ['staff', 'head_staff', 'admin', 'owner'].includes(this.currentUser.rank);
+    }
+
+    isHeadStaff() {
+        return this.currentUser && ['head_staff', 'admin', 'owner'].includes(this.currentUser.rank);
     }
 
     isAdmin() {
@@ -167,6 +184,7 @@ class AuthSystem {
         const labels = {
             'owner': '👑 Owner',
             'admin': '🛡️ Admin',
+            'head_staff': '⭐ Head of Staff',
             'staff': '⭐ Staff',
             'member': '👤 Membru'
         };
@@ -177,6 +195,7 @@ class AuthSystem {
         const colors = {
             'owner': '#ffd700',
             'admin': '#00e676',
+            'head_staff': '#ff6b6b',
             'staff': '#3498db',
             'member': '#8a9a8a'
         };
@@ -187,22 +206,26 @@ class AuthSystem {
         return Object.values(this.users);
     }
 
-    promoteUser(username) {
+    async promoteUser(username) {
+        await this.loadData();
+        
         const user = Object.values(this.users).find(u => u.name.toLowerCase() === username.toLowerCase());
         if (!user) return { success: false, message: 'Utilizatorul nu există!' };
 
-        const ranks = ['member', 'staff', 'admin', 'head of staff' , 'owner'];
+        const ranks = ['member', 'staff', 'head_staff', 'admin', 'owner'];
         const idx = ranks.indexOf(user.rank);
         if (idx >= ranks.length - 1) {
             return { success: false, message: 'Deja la rang maxim!' };
         }
 
         user.rank = ranks[idx + 1];
-        this.saveUsers();
+        await this.saveUsers();
         return { success: true, message: username + ' promovat la ' + this.getRankLabel(user.rank) };
     }
 
-    demoteUser(username) {
+    async demoteUser(username) {
+        await this.loadData();
+        
         if (username.toLowerCase() === 'administrator') {
             return { success: false, message: 'Nu poți demota owner-ul!' };
         }
@@ -210,18 +233,20 @@ class AuthSystem {
         const user = Object.values(this.users).find(u => u.name.toLowerCase() === username.toLowerCase());
         if (!user) return { success: false, message: 'Utilizatorul nu există!' };
 
-        const ranks = ['member', 'staff', 'admin', 'owner'];
+        const ranks = ['member', 'staff', 'head_staff', 'admin', 'owner'];
         const idx = ranks.indexOf(user.rank);
         if (idx <= 0) {
             return { success: false, message: 'Deja la rang minim!' };
         }
 
         user.rank = ranks[idx - 1];
-        this.saveUsers();
+        await this.saveUsers();
         return { success: true, message: username + ' retrogradat la ' + this.getRankLabel(user.rank) };
     }
 
-    deleteUser(username) {
+    async deleteUser(username) {
+        await this.loadData();
+        
         if (username.toLowerCase() === 'administrator') {
             return { success: false, message: 'Nu poți șterge owner-ul!' };
         }
@@ -230,24 +255,38 @@ class AuthSystem {
         if (!entry) return { success: false, message: 'Utilizatorul nu există!' };
 
         delete this.users[entry[0]];
-        this.saveUsers();
+        await this.saveUsers();
         return { success: true, message: username + ' a fost șters!' };
     }
 
-    init() {
-        if (window.location.pathname.includes('panel.html')) {
-            if (!this.isLoggedIn()) {
-                window.location.href = 'index.html';
+    async init() {
+        await this.loadData();
+        
+        // Verifică sesiunea
+        const session = localStorage.getItem(AUTH_CONFIG.SESSION_KEY);
+        if (session) {
+            try {
+                this.currentUser = JSON.parse(session);
+                // Verifică dacă utilizatorul mai există
+                const user = this.users[this.currentUser.id];
+                if (!user) {
+                    this.currentUser = null;
+                    localStorage.removeItem(AUTH_CONFIG.SESSION_KEY);
+                }
+            } catch {
+                this.currentUser = null;
             }
         }
         
-        if (window.location.pathname.includes('index.html')) {
-            if (this.isLoggedIn()) {
-                window.location.href = 'panel.html';
-            }
+        if (window.location.pathname.includes('panel.html') && !this.isLoggedIn()) {
+            window.location.href = 'index.html';
+        }
+        
+        if (window.location.pathname.includes('index.html') && this.isLoggedIn()) {
+            window.location.href = 'panel.html';
         }
     }
 }
 
 window.auth = new AuthSystem();
-console.log('✅ Auth System încărcat! Cont default: Administrator / admin2024');
+console.log('✅ Auth System încărcat cu JSONBin!');
